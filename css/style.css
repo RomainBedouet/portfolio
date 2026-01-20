@@ -1,0 +1,575 @@
+/* ===============================================
+   RESET & BASE STYLES
+   =============================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ===============================================
+   BACKGROUND FIXE AVEC GRADIENT
+   =============================================== */
+.background-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #000000 0%, #1a0a2e 25%, #2d1b3d 50%, #3d1f47 75%, #1a0520 100%);
+  z-index: -2;
+}
+
+/* ===============================================
+   BANDEAU TOURNANT (MARQUEE)
+   =============================================== */
+.marquee-container {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 8s linear infinite;
+}
+
+.marquee-text {
+  font-size: 4rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-right: 2rem;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ===============================================
+   CONTENU PRINCIPAL
+   =============================================== */
+.main-content {
+  position: relative;
+  z-index: 10;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* ===============================================
+   HEADER - PHOTO DE PROFIL + BOUTONS SOCIAUX
+   =============================================== */
+.header {
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+/* Photo de profil */
+.profile-card {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.profile-placeholder {
+  font-size: 5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Boutons sociaux */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.social-btn svg {
+  flex-shrink: 0;
+}
+
+.social-btn.linkedin:hover {
+  background: rgba(10, 102, 194, 0.4);
+}
+
+.social-btn.github:hover {
+  background: rgba(110, 84, 148, 0.4);
+}
+
+/* ===============================================
+   SECTION CARDS EN QUINCONCE
+   =============================================== */
+.cards-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.card {
+  max-width: 600px;
+  padding: 2.5rem;
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 35px 70px rgba(0, 0, 0, 0.6),
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Disposition en quinconce */
+.card-right {
+  align-self: flex-end;
+}
+
+.card-left {
+  align-self: flex-start;
+}
+
+.card h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+}
+
+/* Bouton CV */
+.btn-cv {
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-cv:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+}
+
+/* ===============================================
+   SECTION L'ATELIER - CAROUSSEL
+   =============================================== */
+.atelier-section {
+  padding: 6rem 2rem;
+  margin-top: 4rem;
+}
+
+.atelier-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.atelier-description {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 2rem 0;
+  cursor: grab;
+}
+
+.carousel-container:active {
+  cursor: grabbing;
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  user-select: none;
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+  opacity: 0.6;
+  transform: scale(0.85);
+}
+
+.carousel-item.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.carousel-item.adjacent {
+  opacity: 0.8;
+  transform: scale(0.9);
+}
+
+.carousel-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.4),
+    0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.carousel-item.active .carousel-image {
+  width: 280px;
+  height: 280px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-image span {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* ===============================================
+   FOOTER
+   =============================================== */
+.footer {
+  padding: 4rem 2rem;
+  margin-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btn-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-top:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-links .separator {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+/* ===============================================
+   RESPONSIVE - TABLET
+   =============================================== */
+@media (max-width: 1024px) {
+  .marquee-text {
+    font-size: 3rem;
+  }
+
+  .carousel-image {
+    width: 160px;
+    height: 160px;
+  }
+
+  .carousel-item.active .carousel-image {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* ===============================================
+   RESPONSIVE - MOBILE
+   =============================================== */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .header {
+    padding: 2rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .profile-card {
+    width: 150px;
+    height: 150px;
+  }
+
+  .profile-placeholder {
+    font-size: 4rem;
+  }
+
+  .social-buttons {
+    flex-direction: row;
+  }
+
+  .social-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .marquee-text {
+    font-size: 2rem;
+  }
+
+  .cards-section {
+    padding: 2rem 1rem;
+    gap: 3rem;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  /* Cards en colonne centrée sur mobile (pas de quinconce) */
+  .card-right,
+  .card-left {
+    align-self: center;
+  }
+
+  .card h2 {
+    font-size: 1.4rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
+  }
+
+  .atelier-title {
+    font-size: 2rem;
+  }
+
+  .carousel-container {
+    padding: 1rem 0;
+  }
+
+  .carousel-track {
+    gap: 0.75rem;
+  }
+
+  .carousel-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .carousel-item.active .carousel-image {
+    width: 160px;
+    height: 160px;
+  }
+
+  .footer {
+    padding: 3rem 1rem;
+    margin-top: 3rem;
+  }
+}
+
+/* ===============================================
+   RESPONSIVE - SMALL MOBILE
+   =============================================== */
+@media (max-width: 480px) {
+  .profile-card {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-placeholder {
+    font-size: 3rem;
+  }
+
+  .social-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .social-btn {
+    justify-content: center;
+  }
+
+  .marquee-text {
+    font-size: 1.5rem;
+  }
+
+  .carousel-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .carousel-item.active .carousel-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .carousel-image span {
+    font-size: 0.7rem;
+  }
+}
