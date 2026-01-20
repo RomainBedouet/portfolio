@@ -7,157 +7,173 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ===============================================
-   CAROUSSEL INFINI
-   5 items visibles, centre mis en valeur, boucle infinie
+   CAROUSSEL FLUIDE AVEC DRAG
    =============================================== */
 function initCarousel() {
+  const container = document.querySelector('.carousel-container');
   const track = document.getElementById('carouselTrack');
-  if (!track) return;
+  if (!track || !container) return;
 
   const items = Array.from(track.querySelectorAll('.carousel-item'));
   const totalItems = items.length;
-  const visibleCount = 5;
 
-  let currentIndex = 0;
   let isDragging = false;
   let startX = 0;
-  let dragOffset = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationId = null;
+  let currentIndex = 0;
 
-  // Seuil de drag pour changer de slide
-  const dragThreshold = 50;
-
-  // Fonction pour obtenir l'index avec boucle
-  function getLoopedIndex(index) {
-    return ((index % totalItems) + totalItems) % totalItems;
+  // Calculer les dimensions
+  function getItemWidth() {
+    const item = items[0];
+    const style = window.getComputedStyle(item);
+    const width = item.offsetWidth;
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 24;
+    return width + gap;
   }
 
-  // Mettre à jour l'affichage du caroussel
-  function updateCarousel() {
-    // Cacher tous les items d'abord
-    items.forEach(item => {
-      item.style.display = 'none';
-      item.classList.remove('active', 'adjacent');
+  // Centrer le carousel sur un item
+  function getTranslateForIndex(index) {
+    const itemWidth = getItemWidth();
+    const containerWidth = container.offsetWidth;
+    const centerOffset = (containerWidth - items[0].offsetWidth) / 2;
+    return -index * itemWidth + centerOffset;
+  }
+
+  // Mettre à jour la classe active
+  function updateActiveClass() {
+    items.forEach((item, index) => {
+      item.classList.toggle('active', index === currentIndex);
     });
+  }
 
-    // Afficher les 5 items visibles centrés sur currentIndex
-    for (let i = -2; i <= 2; i++) {
-      const itemIndex = getLoopedIndex(currentIndex + i);
-      const item = items[itemIndex];
-
-      item.style.display = 'block';
-      item.style.order = i + 2; // Pour garder l'ordre visuel
-
-      if (i === 0) {
-        item.classList.add('active');
-      } else if (i === -1 || i === 1) {
-        item.classList.add('adjacent');
-      }
+  // Animation fluide
+  function animate() {
+    track.style.transform = `translateX(${currentTranslate}px)`;
+    if (isDragging) {
+      animationId = requestAnimationFrame(animate);
     }
   }
 
-  // Navigation
-  function goTo(index) {
-    currentIndex = getLoopedIndex(index);
-    updateCarousel();
-  }
+  // Snap vers l'item le plus proche
+  function snapToClosest() {
+    const itemWidth = getItemWidth();
+    const containerWidth = container.offsetWidth;
+    const centerOffset = (containerWidth - items[0].offsetWidth) / 2;
 
-  function next() {
-    goTo(currentIndex + 1);
-  }
+    // Calculer l'index le plus proche
+    currentIndex = Math.round((-currentTranslate + centerOffset) / itemWidth);
 
-  function prev() {
-    goTo(currentIndex - 1);
+    // Limiter aux bornes
+    currentIndex = Math.max(0, Math.min(currentIndex, totalItems - 1));
+
+    // Aller à cet index
+    currentTranslate = getTranslateForIndex(currentIndex);
+    prevTranslate = currentTranslate;
+
+    track.style.transition = 'transform 0.3s ease-out';
+    track.style.transform = `translateX(${currentTranslate}px)`;
+
+    updateActiveClass();
+
+    setTimeout(() => {
+      track.style.transition = '';
+    }, 300);
   }
 
   // Gestion du drag - Souris
   function handleMouseDown(e) {
     isDragging = true;
     startX = e.pageX;
-    dragOffset = 0;
-    track.style.transition = 'none';
-    track.parentElement.style.cursor = 'grabbing';
+    track.style.transition = '';
+    container.style.cursor = 'grabbing';
+    animationId = requestAnimationFrame(animate);
   }
 
   function handleMouseMove(e) {
     if (!isDragging) return;
     e.preventDefault();
-    dragOffset = e.pageX - startX;
+    const currentX = e.pageX;
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
   }
 
   function handleMouseUp() {
     if (!isDragging) return;
     isDragging = false;
-
-    track.style.transition = '';
-    track.parentElement.style.cursor = 'grab';
-
-    // Déterminer si on change de slide
-    if (Math.abs(dragOffset) > dragThreshold) {
-      if (dragOffset > 0) {
-        prev(); // Drag vers la droite = item précédent
-      } else {
-        next(); // Drag vers la gauche = item suivant
-      }
-    }
-
-    dragOffset = 0;
+    cancelAnimationFrame(animationId);
+    container.style.cursor = 'grab';
+    prevTranslate = currentTranslate;
+    snapToClosest();
   }
 
   // Gestion du drag - Tactile
   function handleTouchStart(e) {
     isDragging = true;
     startX = e.touches[0].pageX;
-    dragOffset = 0;
-    track.style.transition = 'none';
+    track.style.transition = '';
+    animationId = requestAnimationFrame(animate);
   }
 
   function handleTouchMove(e) {
     if (!isDragging) return;
-    dragOffset = e.touches[0].pageX - startX;
+    const currentX = e.touches[0].pageX;
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
   }
 
   function handleTouchEnd() {
     if (!isDragging) return;
     isDragging = false;
-
-    track.style.transition = '';
-
-    // Déterminer si on change de slide
-    if (Math.abs(dragOffset) > dragThreshold) {
-      if (dragOffset > 0) {
-        prev();
-      } else {
-        next();
-      }
-    }
-
-    dragOffset = 0;
+    cancelAnimationFrame(animationId);
+    prevTranslate = currentTranslate;
+    snapToClosest();
   }
 
   // Event listeners - Souris
-  track.parentElement.addEventListener('mousedown', handleMouseDown);
+  container.addEventListener('mousedown', handleMouseDown);
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener('mouseleave', handleMouseUp);
 
   // Event listeners - Tactile
-  track.parentElement.addEventListener('touchstart', handleTouchStart, { passive: true });
-  track.parentElement.addEventListener('touchmove', handleTouchMove, { passive: false });
-  track.parentElement.addEventListener('touchend', handleTouchEnd);
+  container.addEventListener('touchstart', handleTouchStart, { passive: true });
+  container.addEventListener('touchmove', handleTouchMove, { passive: false });
+  container.addEventListener('touchend', handleTouchEnd);
 
   // Empêcher le drag des images
-  track.querySelectorAll('img, .carousel-image').forEach(el => {
-    el.addEventListener('dragstart', e => e.preventDefault());
+  track.querySelectorAll('img').forEach(img => {
+    img.addEventListener('dragstart', e => e.preventDefault());
   });
 
   // Clic sur un item pour le centrer
   items.forEach((item, index) => {
-    item.addEventListener('click', () => {
-      if (Math.abs(dragOffset) < 5) {
-        goTo(index);
+    item.addEventListener('click', (e) => {
+      if (Math.abs(currentTranslate - prevTranslate) < 5) {
+        currentIndex = index;
+        currentTranslate = getTranslateForIndex(index);
+        prevTranslate = currentTranslate;
+        track.style.transition = 'transform 0.3s ease-out';
+        track.style.transform = `translateX(${currentTranslate}px)`;
+        updateActiveClass();
+        setTimeout(() => {
+          track.style.transition = '';
+        }, 300);
       }
     });
   });
 
   // Initialiser
-  updateCarousel();
+  currentTranslate = getTranslateForIndex(0);
+  prevTranslate = currentTranslate;
+  track.style.transform = `translateX(${currentTranslate}px)`;
+  updateActiveClass();
+
+  // Recalculer au resize
+  window.addEventListener('resize', () => {
+    currentTranslate = getTranslateForIndex(currentIndex);
+    prevTranslate = currentTranslate;
+    track.style.transform = `translateX(${currentTranslate}px)`;
+  });
 }
