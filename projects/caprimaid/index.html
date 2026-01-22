@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caprimaid Pro | L'hybride que vous n'attendiez pas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Three.js pour le modèle 3D -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+
+<body>
+  <!-- Navigation minimaliste -->
+  <nav class="nav">
+    <a href="../../index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Retour au portfolio
+    </a>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tagline">Nouveau</p>
+      <h1 class="hero-title">Caprimaid Pro</h1>
+      <p class="hero-subtitle">Mi-chèvre. Mi-sirène. 100% inexplicable.</p>
+    </div>
+    <div class="hero-product">
+      <div class="product-3d" id="product3d">
+        <!-- Canvas Three.js pour le modèle 3D -->
+        <canvas id="canvas3d"></canvas>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Faites défiler pour découvrir</span>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Section Feature 1 -->
+  <section class="feature-section">
+    <div class="feature-content">
+      <h2 class="feature-title">Design révolutionnaire.</h2>
+      <p class="feature-text">Sculptée dans un marbre imaginaire extrait des profondeurs de l'Atlantide (secteur chèvrerie), la Caprimaid Pro repousse les limites de ce que vous pensiez possible en matière de décoration d'intérieur absurde.</p>
+    </div>
+  </section>
+
+  <!-- Section Stats -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number">47%</span>
+        <span class="stat-label">Chèvre</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">53%</span>
+        <span class="stat-label">Sirène</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Malaise lors des dîners</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Questions de vos invités</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Feature 2 -->
+  <section class="feature-section feature-dark">
+    <div class="feature-content">
+      <h2 class="feature-title">Technologie de pointe.</h2>
+      <p class="feature-text">Grâce à notre processus de fabrication breveté "WhatTheHeck™", chaque écaille est méticuleusement positionnée pour refléter la lumière de manière à ce que les visiteurs ne sachent jamais vraiment où regarder.</p>
+    </div>
+  </section>
+
+  <!-- Section Caractéristiques -->
+  <section class="specs-section">
+    <h2 class="specs-title">Caractéristiques techniques</h2>
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h3>Regard hypnotique</h3>
+        <p>Ses yeux vous suivent dans toute la pièce. Même quand vous n'êtes pas dans la pièce.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
+          </svg>
+        </div>
+        <h3>Base antidérapante</h3>
+        <p>Ne tombe jamais. Sauf quand vous recevez votre belle-mère. Coïncidence ?</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+        <h3>Multi-environnement</h3>
+        <p>Salon, chambre, salle de bain, aquarium... Elle s'adapte. Vous, un peu moins.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+        </div>
+        <h3>Acoustique optimisée</h3>
+        <p>Amplifie subtilement les bêlements marins. Oui, c'est un son qui existe maintenant.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Prix -->
+  <section class="price-section">
+    <div class="price-content">
+      <h2 class="price-title">Caprimaid Pro</h2>
+      <p class="price-tagline">Édition Limitée — Seulement 3 exemplaires par dimension parallèle</p>
+      <div class="price-tag">
+        <span class="price-currency">€</span>
+        <span class="price-amount">4 999</span>
+        <span class="price-decimal">,99</span>
+      </div>
+      <p class="price-note">Livraison par dauphin-facteur non incluse</p>
+      <button class="btn-buy" disabled>
+        Rupture de stock (évidemment)
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Projet fictif — Aucune chèvre ni sirène n'a été blessée lors de la création de cette page.</p>
+    <a href="../../index.html" class="footer-link">Retour au portfolio</a>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
