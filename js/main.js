@@ -4,235 +4,221 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
+  initSmoothScroll();
+  initFlipCards();
 });
 
 /* ===============================================
-   CAROUSSEL INFINI FLUIDE AVEC DRAG
+   FLIP CARDS - PROJETS FICTIFS
+   =============================================== */
+function initFlipCards() {
+  const flipCards = document.querySelectorAll('.flip-card');
+
+  flipCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ne pas retourner si on clique sur le lien
+      if (e.target.classList.contains('projet-link')) return;
+      card.classList.toggle('flipped');
+    });
+  });
+}
+
+/* ===============================================
+   SMOOTH SCROLL FLUIDE
+   =============================================== */
+function initSmoothScroll() {
+  let currentScroll = window.scrollY;
+  let targetScroll = window.scrollY;
+  let isScrolling = false;
+
+  // Écouter la molette
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    targetScroll += e.deltaY * 0.8; // Réduire la vitesse
+    targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
+
+    if (!isScrolling) {
+      isScrolling = true;
+      smoothScroll();
+    }
+  }, { passive: false });
+
+  function smoothScroll() {
+    currentScroll += (targetScroll - currentScroll) * 0.1; // Interpolation douce
+
+    if (Math.abs(targetScroll - currentScroll) > 0.5) {
+      window.scrollTo(0, currentScroll);
+      requestAnimationFrame(smoothScroll);
+    } else {
+      window.scrollTo(0, targetScroll);
+      isScrolling = false;
+    }
+  }
+
+  // Synchroniser avec le scroll natif (touch, scrollbar)
+  window.addEventListener('scroll', () => {
+    if (!isScrolling) {
+      currentScroll = window.scrollY;
+      targetScroll = window.scrollY;
+    }
+  });
+}
+
+/* ===============================================
+   CAROUSSEL FLUIDE TYPE MAGAZINE (INFINI SANS CLONES)
    =============================================== */
 function initCarousel() {
   const container = document.querySelector('.carousel-container');
   const track = document.getElementById('carouselTrack');
   if (!track || !container) return;
 
-  const originalItems = Array.from(track.querySelectorAll('.carousel-item'));
-  const totalOriginal = originalItems.length;
-
-  // Cloner les items pour créer l'effet infini
-  // On clone tous les éléments au début et à la fin
-  originalItems.forEach(item => {
-    const cloneEnd = item.cloneNode(true);
-    cloneEnd.classList.add('clone');
-    track.appendChild(cloneEnd);
-  });
-  originalItems.forEach(item => {
-    const cloneStart = item.cloneNode(true);
-    cloneStart.classList.add('clone');
-    track.insertBefore(cloneStart, track.firstChild);
-  });
-
-  // Maintenant on a: [clones du début] [originaux] [clones de fin]
-  const allItems = Array.from(track.querySelectorAll('.carousel-item'));
-
   let isDragging = false;
   let startX = 0;
   let currentTranslate = 0;
   let prevTranslate = 0;
-  let animationId = null;
-  let currentIndex = totalOriginal; // Commencer au premier item original (après les clones)
 
-  // Variables pour le momentum
-  let lastX = 0;
-  let lastTime = 0;
-  let velocity = 0;
+  // Obtenir les items actuels
+  function getItems() {
+    return Array.from(track.querySelectorAll('.carousel-item'));
+  }
 
-  // Calculer les dimensions
+  // Calculer la largeur d'un item + gap
   function getItemWidth() {
-    const item = allItems[0];
+    const items = getItems();
+    const item = items[0];
     const width = item.offsetWidth;
     const gap = parseFloat(window.getComputedStyle(track).gap) || 24;
     return width + gap;
   }
 
-  // Centrer le carousel sur un item
-  function getTranslateForIndex(index) {
-    const itemWidth = getItemWidth();
-    const containerWidth = container.offsetWidth;
-    const centerOffset = (containerWidth - allItems[0].offsetWidth) / 2;
-    return -index * itemWidth + centerOffset;
-  }
-
-  // Mettre à jour la classe active
+  // Mettre à jour la classe active (l'item le plus proche du centre)
   function updateActiveClass() {
-    allItems.forEach((item, index) => {
-      // L'index réel dans le tableau d'originaux
-      const realIndex = ((index - totalOriginal) % totalOriginal + totalOriginal) % totalOriginal;
-      const isActive = index === currentIndex;
-      item.classList.toggle('active', isActive);
+    const items = getItems();
+    const containerWidth = container.offsetWidth;
+    const containerCenter = containerWidth / 2;
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    items.forEach((item, index) => {
+      const itemLeft = item.offsetLeft + currentTranslate;
+      const itemCenter = itemLeft + item.offsetWidth / 2;
+      const distance = Math.abs(containerCenter - itemCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    items.forEach((item, index) => {
+      item.classList.toggle('active', index === closestIndex);
     });
   }
 
-  // Vérifier et corriger la position pour l'effet infini (pendant le drag)
-  function checkInfiniteLoopDuringDrag() {
-    const itemWidth = getItemWidth();
-    const totalWidth = itemWidth * totalOriginal;
-
-    // Téléporter dès qu'on approche des bords de la zone originale
-    // Position du premier item original
-    const firstOriginalPos = getTranslateForIndex(totalOriginal);
-    // Position du dernier item original
-    const lastOriginalPos = getTranslateForIndex(totalOriginal * 2 - 1);
-
-    // Si on va trop à droite (currentTranslate augmente = on voit les clones de début)
-    if (currentTranslate > firstOriginalPos + itemWidth / 2) {
-      currentTranslate -= totalWidth;
-      prevTranslate -= totalWidth;
-    }
-    // Si on va trop à gauche (currentTranslate diminue = on voit les clones de fin)
-    else if (currentTranslate < lastOriginalPos - itemWidth / 2) {
-      currentTranslate += totalWidth;
-      prevTranslate += totalWidth;
-    }
+  // Rotation: déplacer le premier élément à la fin
+  function rotateRight() {
+    const firstItem = track.firstElementChild;
+    track.appendChild(firstItem);
+    currentTranslate += getItemWidth();
+    prevTranslate += getItemWidth();
   }
 
-  // Animation fluide
-  function animate() {
-    checkInfiniteLoopDuringDrag();
-    track.style.transform = `translateX(${currentTranslate}px)`;
-    if (isDragging) {
-      animationId = requestAnimationFrame(animate);
-    }
+  // Rotation: déplacer le dernier élément au début
+  function rotateLeft() {
+    const lastItem = track.lastElementChild;
+    track.insertBefore(lastItem, track.firstChild);
+    currentTranslate -= getItemWidth();
+    prevTranslate -= getItemWidth();
   }
 
-  // Vérifier et corriger la position pour l'effet infini (après snap)
-  function checkInfiniteLoop() {
-    const itemWidth = getItemWidth();
-
-    // Si on est sur les clones de fin (après les originaux)
-    if (currentIndex >= totalOriginal * 2) {
-      currentIndex = currentIndex - totalOriginal;
-      currentTranslate = getTranslateForIndex(currentIndex);
-      prevTranslate = currentTranslate;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${currentTranslate}px)`;
-      track.offsetHeight;
-    }
-    // Si on est sur les clones de début (avant les originaux)
-    else if (currentIndex < totalOriginal) {
-      currentIndex = currentIndex + totalOriginal;
-      currentTranslate = getTranslateForIndex(currentIndex);
-      prevTranslate = currentTranslate;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${currentTranslate}px)`;
-      track.offsetHeight;
-    }
-  }
-
-  // Snap vers l'item avec momentum
-  function snapWithMomentum() {
-    const itemWidth = getItemWidth();
+  // Vérifier si on doit faire une rotation pour l'effet infini
+  function checkRotation() {
     const containerWidth = container.offsetWidth;
-    const centerOffset = (containerWidth - allItems[0].offsetWidth) / 2;
+    const itemWidth = getItemWidth();
+    const totalItems = getItems().length;
 
-    // Calculer combien d'items on doit sauter basé sur la vélocité
-    // Plus la vélocité est grande, plus on saute d'items
-    const momentumDistance = velocity * 0.15; // Facteur de momentum
-    const targetTranslate = currentTranslate + momentumDistance;
+    // Boucle pour gérer plusieurs rotations si drag rapide
+    let iterations = 0;
 
-    // Calculer l'index cible
-    currentIndex = Math.round((-targetTranslate + centerOffset) / itemWidth);
+    while (iterations < totalItems) {
+      // Re-récupérer les items à chaque itération car l'ordre change
+      const items = getItems();
+      const firstItem = items[0];
+      const lastItem = items[items.length - 1];
 
-    // Aller à cet index
-    currentTranslate = getTranslateForIndex(currentIndex);
-    prevTranslate = currentTranslate;
+      // Position du premier item
+      const firstItemLeft = firstItem.offsetLeft + currentTranslate;
+      // Position du dernier item (bord droit)
+      const lastItemRight = lastItem.offsetLeft + lastItem.offsetWidth + currentTranslate;
 
-    // Durée de transition proportionnelle à la distance
-    const distance = Math.abs(momentumDistance);
-    const duration = Math.min(0.6, Math.max(0.3, distance / 1000));
+      // Si le premier item est trop à droite (on voit du vide à gauche)
+      if (firstItemLeft > itemWidth) {
+        rotateLeft();
+        track.style.transform = `translateX(${currentTranslate}px)`;
+      }
+      // Si le dernier item est trop à gauche (on voit du vide à droite)
+      else if (lastItemRight < containerWidth - itemWidth) {
+        rotateRight();
+        track.style.transform = `translateX(${currentTranslate}px)`;
+      }
+      else {
+        break;
+      }
+      iterations++;
+    }
+  }
 
-    track.style.transition = `transform ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+  // Appliquer le transform
+  function setPosition() {
     track.style.transform = `translateX(${currentTranslate}px)`;
-
+    checkRotation();
     updateActiveClass();
-
-    setTimeout(() => {
-      track.style.transition = '';
-      checkInfiniteLoop();
-    }, duration * 1000);
   }
 
   // Gestion du drag - Souris
   function handleMouseDown(e) {
     isDragging = true;
     startX = e.pageX;
-    lastX = e.pageX;
-    lastTime = Date.now();
-    velocity = 0;
-    track.style.transition = '';
     container.style.cursor = 'grabbing';
-    animationId = requestAnimationFrame(animate);
+    track.style.transition = 'none';
   }
 
   function handleMouseMove(e) {
     if (!isDragging) return;
     e.preventDefault();
     const currentX = e.pageX;
-    const currentTime = Date.now();
     const diff = currentX - startX;
-
-    // Calculer la vélocité
-    const timeDiff = currentTime - lastTime;
-    if (timeDiff > 0) {
-      velocity = (currentX - lastX) / timeDiff * 16; // Normaliser à ~60fps
-    }
-
-    lastX = currentX;
-    lastTime = currentTime;
     currentTranslate = prevTranslate + diff;
+    setPosition();
   }
 
   function handleMouseUp() {
     if (!isDragging) return;
     isDragging = false;
-    cancelAnimationFrame(animationId);
     container.style.cursor = 'grab';
     prevTranslate = currentTranslate;
-    snapWithMomentum();
   }
 
   // Gestion du drag - Tactile
   function handleTouchStart(e) {
     isDragging = true;
     startX = e.touches[0].pageX;
-    lastX = e.touches[0].pageX;
-    lastTime = Date.now();
-    velocity = 0;
-    track.style.transition = '';
-    animationId = requestAnimationFrame(animate);
+    track.style.transition = 'none';
   }
 
   function handleTouchMove(e) {
     if (!isDragging) return;
     const currentX = e.touches[0].pageX;
-    const currentTime = Date.now();
     const diff = currentX - startX;
-
-    // Calculer la vélocité
-    const timeDiff = currentTime - lastTime;
-    if (timeDiff > 0) {
-      velocity = (currentX - lastX) / timeDiff * 16; // Normaliser à ~60fps
-    }
-
-    lastX = currentX;
-    lastTime = currentTime;
     currentTranslate = prevTranslate + diff;
+    setPosition();
   }
 
   function handleTouchEnd() {
     if (!isDragging) return;
     isDragging = false;
-    cancelAnimationFrame(animationId);
     prevTranslate = currentTranslate;
-    snapWithMomentum();
   }
 
   // Event listeners - Souris
@@ -251,34 +237,42 @@ function initCarousel() {
     img.addEventListener('dragstart', e => e.preventDefault());
   });
 
-  // Clic sur un item pour le centrer (naviguer vers l'item cliqué)
-  allItems.forEach((item, index) => {
-    item.addEventListener('click', (e) => {
-      if (Math.abs(currentTranslate - prevTranslate) < 5) {
-        currentIndex = index;
-        currentTranslate = getTranslateForIndex(index);
-        prevTranslate = currentTranslate;
-        track.style.transition = 'transform 0.3s ease-out';
-        track.style.transform = `translateX(${currentTranslate}px)`;
-        updateActiveClass();
-        setTimeout(() => {
-          track.style.transition = '';
-          checkInfiniteLoop();
-        }, 300);
-      }
-    });
+  // Clic sur un item pour le centrer
+  track.addEventListener('click', (e) => {
+    const clickedItem = e.target.closest('.carousel-item');
+    if (!clickedItem) return;
+
+    const containerWidth = container.offsetWidth;
+    const containerCenter = containerWidth / 2;
+    const itemCenter = clickedItem.offsetLeft + clickedItem.offsetWidth / 2;
+    const offset = containerCenter - itemCenter;
+
+    currentTranslate += offset;
+    prevTranslate = currentTranslate;
+
+    track.style.transition = 'transform 0.3s ease-out';
+    track.style.transform = `translateX(${currentTranslate}px)`;
+
+    setTimeout(() => {
+      track.style.transition = 'none';
+      checkRotation();
+      updateActiveClass();
+    }, 300);
   });
 
-  // Initialiser - commencer au premier item original (index = totalOriginal)
-  currentIndex = totalOriginal;
-  currentTranslate = getTranslateForIndex(currentIndex);
+  // Initialiser - premier item à gauche de la page
+  currentTranslate = 50; // 50px de marge à gauche
   prevTranslate = currentTranslate;
   track.style.transform = `translateX(${currentTranslate}px)`;
   updateActiveClass();
 
   // Recalculer au resize
   window.addEventListener('resize', () => {
-    currentTranslate = getTranslateForIndex(currentIndex);
+    const containerWidth = container.offsetWidth;
+    const items = getItems();
+    const activeItem = items.find(item => item.classList.contains('active')) || items[0];
+    const itemCenter = activeItem.offsetLeft + activeItem.offsetWidth / 2;
+    currentTranslate = containerWidth / 2 - itemCenter + currentTranslate;
     prevTranslate = currentTranslate;
     track.style.transform = `translateX(${currentTranslate}px)`;
   });

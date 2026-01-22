@@ -84,7 +84,7 @@ body {
 }
 
 /* ===============================================
-   HEADER - PHOTO DE PROFIL + BOUTONS SOCIAUX
+   HEADER - PHOTO DE PROFIL + BOUTONS SOCIAUX + CARD BIENVENUE
    =============================================== */
 .header {
   padding: 4rem 2rem;
@@ -94,15 +94,65 @@ body {
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 3rem;
+  justify-content: space-between;
+  gap: 2rem;
   flex-wrap: wrap;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.profile-group {
+  display: flex;
+  align-items: center;
+  gap: 6rem;
+  flex-shrink: 0;
+}
+
+.card-bienvenue {
+  flex: 1;
+  min-width: 50%;
+  max-width: 55%;
+  padding: 1.5rem 2rem;
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-bienvenue:hover {
+  transform: scale(1.02);
+  box-shadow:
+    0 35px 70px rgba(0, 0, 0, 0.6),
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.card-bienvenue h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-bienvenue p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* Photo de profil */
 .profile-card {
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
   background: rgba(20, 20, 40, 0.6);
   backdrop-filter: blur(20px);
@@ -145,14 +195,14 @@ body {
 .social-buttons {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .social-btn {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
+  gap: 1rem;
+  padding: 1.2rem 2rem;
   background: rgba(20, 20, 40, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -161,6 +211,7 @@ body {
   color: #ffffff;
   text-decoration: none;
   font-weight: 500;
+  font-size: 1.1rem;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.3),
     0 5px 15px rgba(0, 0, 0, 0.2);
@@ -193,14 +244,28 @@ body {
 .cards-section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
+  margin-top: -20px;
+}
+
+.cards-quinconce {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 3rem;
 }
 
+.cards-quinconce .card-left {
+  align-self: flex-start;
+}
+
+.cards-quinconce .card-right {
+  align-self: flex-start;
+  margin-top: 115px;
+}
+
 .card {
-  max-width: 600px;
+  max-width: 500px;
   padding: 2.5rem;
   background: rgba(20, 20, 40, 0.4);
   backdrop-filter: blur(20px);
@@ -247,7 +312,8 @@ body {
 
 /* Bouton CV */
 .btn-cv {
-  margin-top: 1.5rem;
+  display: block;
+  margin: 1.5rem auto 0 auto;
   padding: 1rem 2rem;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
   backdrop-filter: blur(10px);
@@ -269,37 +335,173 @@ body {
 }
 
 /* ===============================================
+   SECTION PROJETS FICTIFS - FLIP CARDS
+   =============================================== */
+.projets-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.projets-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #ffffff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.projets-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.flip-card {
+  width: 350px;
+  height: 400px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg) scale(1.05);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.flip-card-front {
+  z-index: 2;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  padding: 2rem;
+  text-align: center;
+}
+
+.projet-placeholder {
+  font-size: 2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.flip-card-back h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.flip-card-back p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.projet-link {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.projet-link:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+  transform: translateY(-2px);
+}
+
+/* ===============================================
    SECTION L'ATELIER - CAROUSSEL
    =============================================== */
 .atelier-section {
   padding: 4rem 2rem;
   margin-top: 0;
+  overflow: hidden;
+}
+
+.atelier-card {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  padding: 2.5rem;
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.atelier-card:hover {
+  transform: scale(1.02);
+  box-shadow:
+    0 35px 70px rgba(0, 0, 0, 0.6),
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .atelier-title {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #ffffff;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .atelier-description {
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 3rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
   line-height: 1.8;
+  margin: 0;
 }
 
 .carousel-container {
   position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   padding: 2rem 0;
   cursor: grab;
 }
@@ -362,19 +564,20 @@ body {
    FOOTER
    =============================================== */
 .footer {
-  padding: 4rem 2rem;
+  padding: 2rem 2rem 1rem 2rem;
   margin-top: 0;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .btn-top {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   background: rgba(20, 20, 40, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -467,7 +670,17 @@ body {
 
   .header-content {
     flex-direction: column;
+    align-items: center;
     gap: 2rem;
+  }
+
+  .profile-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-bienvenue {
+    max-width: 100%;
   }
 
   .profile-card {
@@ -494,7 +707,16 @@ body {
 
   .cards-section {
     padding: 2rem 1rem;
-    gap: 3rem;
+  }
+
+  .cards-quinconce {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .cards-quinconce .card-right {
+    margin-top: 0;
   }
 
   .card {
