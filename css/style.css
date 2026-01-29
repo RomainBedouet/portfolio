@@ -11,14 +11,17 @@
 
 html {
   scroll-behavior: smooth;
+  background: #000000;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   line-height: 1.6;
+  background: linear-gradient(135deg, #000000 0%, #1a0a2e 25%, #2d1b3d 50%, #3d1f47 75%, #1a0520 100%);
 }
 
 /* ===============================================
@@ -29,7 +32,8 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: 100dvh;
   background: linear-gradient(135deg, #000000 0%, #1a0a2e 25%, #2d1b3d 50%, #3d1f47 75%, #1a0520 100%);
   z-index: -2;
 }
@@ -114,7 +118,7 @@ body {
   min-width: 50%;
   max-width: 55%;
   padding: 1.5rem 2rem;
-  background: rgba(20, 20, 40, 0.4);
+  background: rgba(20, 20, 40, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -154,7 +158,7 @@ body {
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  background: rgba(20, 20, 40, 0.6);
+  background: rgba(20, 20, 40, 0.35);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -203,7 +207,7 @@ body {
   align-items: center;
   gap: 1rem;
   padding: 1.2rem 2rem;
-  background: rgba(20, 20, 40, 0.6);
+  background: rgba(20, 20, 40, 0.35);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -271,7 +275,7 @@ body {
 .card {
   max-width: 500px;
   padding: 2.5rem;
-  background: rgba(20, 20, 40, 0.4);
+  background: rgba(20, 20, 40, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -424,7 +428,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 20, 40, 0.4);
+  background: rgba(20, 20, 40, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -495,7 +499,7 @@ body {
   max-width: 800px;
   margin: 0 auto 3rem;
   padding: 2.5rem;
-  background: rgba(20, 20, 40, 0.4);
+  background: rgba(20, 20, 40, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -612,7 +616,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 1rem;
-  background: rgba(20, 20, 40, 0.6);
+  background: rgba(20, 20, 40, 0.35);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
