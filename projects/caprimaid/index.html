@@ -2,38 +2,30 @@
 <html lang="fr">
 
 <head>
-  <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-PJZFML5L');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZ36RYM6B3"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-JZ36RYM6B3');
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caprimaid Pro | L'hybride que vous n'attendiez pas</title>
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Three.js pour le modèle 3D -->
+  <link rel="stylesheet" href="css/style.css?v=3">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
-  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PJZFML5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Navigation minimaliste -->
   <nav class="nav">
     <a href="../../index.html" class="nav-back">
       <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -43,7 +35,6 @@
     </a>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
       <p class="hero-tagline">Nouveau</p>
@@ -51,10 +42,7 @@
       <p class="hero-subtitle">Mi-chèvre. Mi-sirène. 100% inexplicable.</p>
     </div>
     <div class="hero-product">
-      <div class="product-3d" id="product3d">
-        <!-- Canvas Three.js pour le modèle 3D -->
-        <canvas id="canvas3d"></canvas>
-      </div>
+      <div class="product-3d" id="product3d"></div>
     </div>
     <div class="scroll-indicator">
       <span>Faites défiler pour découvrir</span>
@@ -64,7 +52,6 @@
     </div>
   </section>
 
-  <!-- Section Feature 1 -->
   <section class="feature-section">
     <div class="feature-content">
       <h2 class="feature-title">Design révolutionnaire.</h2>
@@ -72,7 +59,6 @@
     </div>
   </section>
 
-  <!-- Section Stats -->
   <section class="stats-section">
     <div class="stats-grid">
       <div class="stat-item">
@@ -94,7 +80,6 @@
     </div>
   </section>
 
-  <!-- Section Feature 2 -->
   <section class="feature-section feature-dark">
     <div class="feature-content">
       <h2 class="feature-title">Technologie de pointe.</h2>
@@ -102,7 +87,6 @@
     </div>
   </section>
 
-  <!-- Section Caractéristiques -->
   <section class="specs-section">
     <h2 class="specs-title">Caractéristiques techniques</h2>
     <div class="specs-grid">
@@ -145,7 +129,6 @@
     </div>
   </section>
 
-  <!-- Section Prix -->
   <section class="price-section">
     <div class="price-content">
       <h2 class="price-title">Caprimaid Pro</h2>
@@ -162,13 +145,109 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>Projet fictif — Aucune chèvre ni sirène n'a été blessée lors de la création de cette page.</p>
     <a href="../../index.html" class="footer-link">Retour au portfolio</a>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+      var container = document.getElementById('product3d');
+      if (!container) return;
+
+      var w = container.clientWidth || 600;
+      var h = container.clientHeight || 400;
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 0, 6);
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.domElement.style.display = 'block';
+      container.appendChild(renderer.domElement);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      var light1 = new THREE.DirectionalLight(0xffffff, 1.2);
+      light1.position.set(5, 5, 5);
+      scene.add(light1);
+      var light2 = new THREE.DirectionalLight(0x667eea, 0.5);
+      light2.position.set(-5, 3, -5);
+      scene.add(light2);
+
+      var pivot = null;
+      var targetRotation = 0;
+      var currentRotation = 0;
+
+      var loader = new THREE.GLTFLoader();
+      loader.load('assets/scene.gltf', function(gltf) {
+        var model = gltf.scene;
+        var box = new THREE.Box3().setFromObject(model);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z);
+        var scale = 3 / maxDim;
+
+        pivot = new THREE.Group();
+        pivot.add(model);
+        model.position.set(-center.x, -center.y, -center.z);
+        pivot.scale.setScalar(scale);
+        scene.add(pivot);
+      });
+
+      window.addEventListener('scroll', function() {
+        if (window.scrollY < window.innerHeight) {
+          targetRotation = (window.scrollY / window.innerHeight) * Math.PI * 2;
+        }
+      });
+
+      window.addEventListener('resize', function() {
+        var rw = container.clientWidth || 600;
+        var rh = container.clientHeight || 400;
+        camera.aspect = rw / rh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(rw, rh);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        currentRotation += (targetRotation - currentRotation) * 0.08;
+        if (pivot) pivot.rotation.y = currentRotation;
+        renderer.render(scene, camera);
+      }
+      animate();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.2 });
+
+      document.querySelectorAll('.feature-section, .stats-section, .specs-section, .price-section').forEach(function(s) {
+        s.classList.add('fade-in');
+        observer.observe(s);
+      });
+      document.querySelectorAll('.spec-card').forEach(function(c, i) {
+        c.classList.add('fade-in');
+        c.style.transitionDelay = (i * 0.1) + 's';
+        observer.observe(c);
+      });
+      document.querySelectorAll('.stat-item').forEach(function(item, i) {
+        item.classList.add('fade-in');
+        item.style.transitionDelay = (i * 0.15) + 's';
+        observer.observe(item);
+      });
+
+      var style = document.createElement('style');
+      style.textContent = '.fade-in{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}.fade-in.visible{opacity:1;transform:translateY(0)}.feature-section.fade-in,.stats-section.fade-in,.specs-section.fade-in,.price-section.fade-in{transform:none}.feature-section.fade-in .feature-content,.stats-section.fade-in .stats-grid,.price-section.fade-in .price-content{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}.feature-section.visible .feature-content,.stats-section.visible .stats-grid,.price-section.visible .price-content{opacity:1;transform:translateY(0)}';
+      document.head.appendChild(style);
+    });
+  </script>
 </body>
 
 </html>

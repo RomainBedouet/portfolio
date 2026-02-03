@@ -1,40 +1,28 @@
-/* ===============================================
-   PORTFOLIO - MAIN JAVASCRIPT
-   =============================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
   initSmoothScroll();
   initFlipCards();
 });
 
-/* ===============================================
-   FLIP CARDS - PROJETS FICTIFS
-   =============================================== */
 function initFlipCards() {
   const flipCards = document.querySelectorAll('.flip-card');
 
   flipCards.forEach(card => {
     card.addEventListener('click', (e) => {
-      // Ne pas retourner si on clique sur le lien
       if (e.target.classList.contains('projet-link')) return;
       card.classList.toggle('flipped');
     });
   });
 }
 
-/* ===============================================
-   SMOOTH SCROLL FLUIDE
-   =============================================== */
 function initSmoothScroll() {
   let currentScroll = window.scrollY;
   let targetScroll = window.scrollY;
   let isScrolling = false;
 
-  // Écouter la molette
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
-    targetScroll += e.deltaY * 0.8; // Réduire la vitesse
+    targetScroll += e.deltaY * 0.8;
     targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
 
     if (!isScrolling) {
@@ -44,7 +32,7 @@ function initSmoothScroll() {
   }, { passive: false });
 
   function smoothScroll() {
-    currentScroll += (targetScroll - currentScroll) * 0.1; // Interpolation douce
+    currentScroll += (targetScroll - currentScroll) * 0.1;
 
     if (Math.abs(targetScroll - currentScroll) > 0.5) {
       window.scrollTo(0, currentScroll);
@@ -55,7 +43,6 @@ function initSmoothScroll() {
     }
   }
 
-  // Synchroniser avec le scroll natif (touch, scrollbar)
   window.addEventListener('scroll', () => {
     if (!isScrolling) {
       currentScroll = window.scrollY;
@@ -64,9 +51,6 @@ function initSmoothScroll() {
   });
 }
 
-/* ===============================================
-   CAROUSSEL FLUIDE TYPE MAGAZINE (INFINI SANS CLONES)
-   =============================================== */
 function initCarousel() {
   const container = document.querySelector('.carousel-container');
   const track = document.getElementById('carouselTrack');
@@ -77,12 +61,10 @@ function initCarousel() {
   let currentTranslate = 0;
   let prevTranslate = 0;
 
-  // Obtenir les items actuels
   function getItems() {
     return Array.from(track.querySelectorAll('.carousel-item'));
   }
 
-  // Calculer la largeur d'un item + gap
   function getItemWidth() {
     const items = getItems();
     const item = items[0];
@@ -91,7 +73,6 @@ function initCarousel() {
     return width + gap;
   }
 
-  // Mettre à jour la classe active (l'item le plus proche du centre)
   function updateActiveClass() {
     const items = getItems();
     const containerWidth = container.offsetWidth;
@@ -116,7 +97,6 @@ function initCarousel() {
     });
   }
 
-  // Rotation: déplacer le premier élément à la fin
   function rotateRight() {
     const firstItem = track.firstElementChild;
     track.appendChild(firstItem);
@@ -124,7 +104,6 @@ function initCarousel() {
     prevTranslate += getItemWidth();
   }
 
-  // Rotation: déplacer le dernier élément au début
   function rotateLeft() {
     const lastItem = track.lastElementChild;
     track.insertBefore(lastItem, track.firstChild);
@@ -132,51 +111,40 @@ function initCarousel() {
     prevTranslate -= getItemWidth();
   }
 
-  // Vérifier si on doit faire une rotation pour l'effet infini
   function checkRotation() {
     const containerWidth = container.offsetWidth;
     const itemWidth = getItemWidth();
     const totalItems = getItems().length;
 
-    // Boucle pour gérer plusieurs rotations si drag rapide
     let iterations = 0;
 
     while (iterations < totalItems) {
-      // Re-récupérer les items à chaque itération car l'ordre change
       const items = getItems();
       const firstItem = items[0];
       const lastItem = items[items.length - 1];
 
-      // Position du premier item
       const firstItemLeft = firstItem.offsetLeft + currentTranslate;
-      // Position du dernier item (bord droit)
       const lastItemRight = lastItem.offsetLeft + lastItem.offsetWidth + currentTranslate;
 
-      // Si le premier item est trop à droite (on voit du vide à gauche)
       if (firstItemLeft > itemWidth) {
         rotateLeft();
         track.style.transform = `translateX(${currentTranslate}px)`;
-      }
-      // Si le dernier item est trop à gauche (on voit du vide à droite)
-      else if (lastItemRight < containerWidth - itemWidth) {
+      } else if (lastItemRight < containerWidth - itemWidth) {
         rotateRight();
         track.style.transform = `translateX(${currentTranslate}px)`;
-      }
-      else {
+      } else {
         break;
       }
       iterations++;
     }
   }
 
-  // Appliquer le transform
   function setPosition() {
     track.style.transform = `translateX(${currentTranslate}px)`;
     checkRotation();
     updateActiveClass();
   }
 
-  // Gestion du drag - Souris
   function handleMouseDown(e) {
     isDragging = true;
     startX = e.pageX;
@@ -200,7 +168,6 @@ function initCarousel() {
     prevTranslate = currentTranslate;
   }
 
-  // Gestion du drag - Tactile
   function handleTouchStart(e) {
     isDragging = true;
     startX = e.touches[0].pageX;
@@ -221,23 +188,19 @@ function initCarousel() {
     prevTranslate = currentTranslate;
   }
 
-  // Event listeners - Souris
   container.addEventListener('mousedown', handleMouseDown);
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);
   document.addEventListener('mouseleave', handleMouseUp);
 
-  // Event listeners - Tactile
   container.addEventListener('touchstart', handleTouchStart, { passive: true });
   container.addEventListener('touchmove', handleTouchMove, { passive: false });
   container.addEventListener('touchend', handleTouchEnd);
 
-  // Empêcher le drag des images
   track.querySelectorAll('img').forEach(img => {
     img.addEventListener('dragstart', e => e.preventDefault());
   });
 
-  // Clic sur un item pour le centrer
   track.addEventListener('click', (e) => {
     const clickedItem = e.target.closest('.carousel-item');
     if (!clickedItem) return;
@@ -260,13 +223,11 @@ function initCarousel() {
     }, 300);
   });
 
-  // Initialiser - premier item à gauche de la page
-  currentTranslate = 50; // 50px de marge à gauche
+  currentTranslate = 50;
   prevTranslate = currentTranslate;
   track.style.transform = `translateX(${currentTranslate}px)`;
   updateActiveClass();
 
-  // Recalculer au resize
   window.addEventListener('resize', () => {
     const containerWidth = container.offsetWidth;
     const items = getItems();
