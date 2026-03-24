@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
-  initSmoothScroll();
   initFlipCards();
 });
 
@@ -12,42 +11,6 @@ function initFlipCards() {
       if (e.target.classList.contains('projet-link')) return;
       card.classList.toggle('flipped');
     });
-  });
-}
-
-function initSmoothScroll() {
-  let currentScroll = window.scrollY;
-  let targetScroll = window.scrollY;
-  let isScrolling = false;
-
-  window.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    targetScroll += e.deltaY * 0.8;
-    targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
-
-    if (!isScrolling) {
-      isScrolling = true;
-      smoothScroll();
-    }
-  }, { passive: false });
-
-  function smoothScroll() {
-    currentScroll += (targetScroll - currentScroll) * 0.1;
-
-    if (Math.abs(targetScroll - currentScroll) > 0.5) {
-      window.scrollTo(0, currentScroll);
-      requestAnimationFrame(smoothScroll);
-    } else {
-      window.scrollTo(0, targetScroll);
-      isScrolling = false;
-    }
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!isScrolling) {
-      currentScroll = window.scrollY;
-      targetScroll = window.scrollY;
-    }
   });
 }
 

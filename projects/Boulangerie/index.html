@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Au Pain Doré — Boulangerie Artisanale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:   #FAF4E8;
+      --warm:    #F0E2C8;
+      --gold:    #B8860B;
+      --amber:   #D4950A;
+      --brown:   #3B1F0E;
+      --dark:    #1E0E05;
+      --muted:   #7A5C42;
+    }
+
+    *, *::before, *::after {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(30, 14, 5, 0.90) 0%,
+        rgba(30, 14, 5, 0.45) 45%,
+        rgba(30, 14, 5, 0.10) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 clamp(2rem, 8vw, 8rem) clamp(3rem, 7vh, 6rem);
+      width: 100%;
+    }
+
+    .hero-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.92;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #E8C97A;
+    }
+
+    .hero-sub {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      letter-spacing: 0.15em;
+      color: rgba(250, 244, 232, 0.75);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      right: clamp(2rem, 8vw, 8rem);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      color: rgba(250, 244, 232, 0.5);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+    }
+
+    .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(250,244,232,0.5), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(0.6); opacity: 1; }
+    }
+
+    /* ── DIVIDER ──────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 clamp(2rem, 8vw, 8rem);
+      margin: 4rem 0 0;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.4;
+    }
+
+    .divider-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+
+    /* ── HISTOIRE ─────────────────────────── */
+    .histoire {
+      padding: clamp(4rem, 8vh, 7rem) clamp(2rem, 8vw, 8rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .histoire-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+    }
+
+    .histoire-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 2rem;
+    }
+
+    .histoire-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .histoire-body {
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--muted);
+      max-width: 480px;
+    }
+
+    .histoire-body p + p {
+      margin-top: 1.2rem;
+    }
+
+    .histoire-visual {
+      position: relative;
+    }
+
+    .annee-bloc {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid rgba(184,134,11,0.3);
+      padding: 2.5rem 3rem;
+      background: var(--warm);
+    }
+
+    .annee-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 7vw, 7rem);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--dark);
+      letter-spacing: -0.02em;
+    }
+
+    .annee-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+
+    .annee-badge {
+      position: absolute;
+      bottom: -1.5rem;
+      right: -1.5rem;
+      width: 80px;
+      height: 80px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--cream);
+    }
+
+    .valeurs {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .valeur-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+
+    .valeur-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      margin-top: 0.55rem;
+      flex-shrink: 0;
+    }
+
+    .valeur-text {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brown);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* ── SPÉCIALITÉS ──────────────────────── */
+    .specialites {
+      background: var(--brown);
+      padding: clamp(4rem, 8vh, 7rem) clamp(2rem, 8vw, 8rem);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: clamp(3rem, 5vh, 5rem);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--cream);
+      line-height: 1.15;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: #E8C97A;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5px;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(184,134,11,0.2);
+      border: 1px solid rgba(184,134,11,0.2);
+    }
+
+    .spec-card {
+      background: var(--brown);
+      padding: 2.8rem 2.2rem;
+      transition: background 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spec-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--amber));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .spec-card:hover {
+      background: #4A2510;
+    }
+
+    .spec-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .spec-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      filter: grayscale(0.2);
+    }
+
+    .spec-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+
+    .spec-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(240, 226, 200, 0.65);
+    }
+
+    /* ── HORAIRES & CONTACT ───────────────── */
+    .contact-section {
+      padding: clamp(4rem, 8vh, 7rem) clamp(2rem, 8vw, 8rem);
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: start;
+    }
+
+    .contact-block .section-label {
+      color: var(--amber);
+    }
+
+    .contact-block .section-title {
+      color: var(--dark);
+      margin-bottom: 2.5rem;
+    }
+
+    .horaires-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .horaires-table tr {
+      border-bottom: 1px solid rgba(184,134,11,0.15);
+    }
+
+    .horaires-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .horaires-table td {
+      padding: 0.85rem 0;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .horaires-table td:first-child {
+      color: var(--brown);
+      font-weight: 400;
+      width: 45%;
+    }
+
+    .horaires-table .closed {
+      color: rgba(122, 92, 66, 0.45);
+      font-style: italic;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      font-size: 1.3rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .info-content {}
+
+    .info-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--brown);
+      line-height: 1.6;
+    }
+
+    .btn-map {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      padding: 0.75rem 1.8rem;
+      background: var(--gold);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-map:hover {
+      background: var(--amber);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ───────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 2.5rem clamp(2rem, 8vw, 8rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-brand span {
+      color: #E8C97A;
+      font-style: italic;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: rgba(250,244,232,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ANIMATIONS ───────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ───────────────────────── */
+    @media (max-width: 768px) {
+      .histoire {
+        grid-template-columns: 1fr;
+      }
+
+      .histoire-visual {
+        display: flex;
+        justify-content: center;
+      }
+
+      .annee-badge {
+        right: calc(50% - 5.5rem);
+      }
+
+      .contact-section {
+        grid-template-columns: 1fr;
+      }
+
+      .valeurs {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-scroll { display: none; }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img
+      src="assets/Boulangerie aléatoire.jpg"
+      alt="Intérieur de la boulangerie Au Pain Doré"
+      class="hero-img"
+    />
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-label">Boulangerie artisanale · Depuis 1987</p>
+      <h1 class="hero-title">Au<br/><em>Pain Doré</em></h1>
+      <p class="hero-sub">Fait à la main, cuit avec amour, savouré ensemble.</p>
+    </div>
+
+    <div class="hero-scroll">Défiler</div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <span class="divider-line"></span>
+    <span class="divider-ornament">✦</span>
+    <span class="divider-line"></span>
+  </div>
+
+  <!-- NOTRE HISTOIRE -->
+  <section class="histoire">
+    <div class="fade-in">
+      <p class="histoire-label">Notre histoire</p>
+      <h2 class="histoire-title">Un savoir-faire<br/>transmis de <em>génération<br/>en génération</em></h2>
+      <div class="histoire-body">
+        <p>
+          Tout a commencé en 1987 lorsque Marcel Fontaine, boulanger de père en fils, ouvre sa première boutique
+          rue du Vieux-Marché. Guidé par la patience, la farine et le respect des temps de pousse,
+          il forge une recette simple : des ingrédients vrais, des mains qui travaillent à l'aube.
+        </p>
+        <p>
+          Aujourd'hui, son fils Thomas perpétue cette tradition avec la même exigence. Ici, rien n'est pressé.
+          Chaque miche, chaque viennoiserie est façonnée selon les gestes d'autrefois.
+        </p>
+      </div>
+      <div class="valeurs">
+        <div class="valeur-item">
+          <span class="valeur-dot"></span>
+          <span class="valeur-text">Farines<br/>locales</span>
+        </div>
+        <div class="valeur-item">
+          <span class="valeur-dot"></span>
+          <span class="valeur-text">Levain<br/>naturel</span>
+        </div>
+        <div class="valeur-item">
+          <span class="valeur-dot"></span>
+          <span class="valeur-text">Cuisson<br/>au four à bois</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="histoire-visual fade-in" style="transition-delay: 0.2s">
+      <div class="annee-bloc">
+        <span class="annee-num">1987</span>
+        <span class="annee-label">Année de fondation</span>
+      </div>
+      <div class="annee-badge">🌾</div>
+    </div>
+  </section>
+
+  <!-- SPÉCIALITÉS -->
+  <section class="specialites">
+    <div class="section-header fade-in">
+      <p class="section-label">Nos spécialités</p>
+      <h2 class="section-title">Ce qui sort de notre <em>fournil</em></h2>
+    </div>
+
+    <div class="cards-grid">
+      <div class="spec-card fade-in">
+        <span class="spec-icon">🍞</span>
+        <h3 class="spec-name">Pain au levain</h3>
+        <p class="spec-desc">Notre signature. Une mie alvéolée, une croûte dorée et craquante. Fermenté 24 heures pour un goût profond et une meilleure digestion.</p>
+      </div>
+      <div class="spec-card fade-in" style="transition-delay: 0.1s">
+        <span class="spec-icon">🥐</span>
+        <h3 class="spec-name">Croissant pur beurre</h3>
+        <p class="spec-desc">Feuilletage fait main avec du beurre AOP Charentes-Poitou. Croustillant à l'extérieur, fondant à l'intérieur. Un rituel du matin.</p>
+      </div>
+      <div class="spec-card fade-in" style="transition-delay: 0.2s">
+        <span class="spec-icon">🍮</span>
+        <h3 class="spec-name">Flan pâtissier</h3>
+        <p class="spec-desc">La recette de grand-mère, inchangée depuis 1987. Crème vanille sur une pâte brisée croustillante. Servi tiède ou froid selon l'humeur.</p>
+      </div>
+      <div class="spec-card fade-in" style="transition-delay: 0.3s">
+        <span class="spec-icon">🎂</span>
+        <h3 class="spec-name">Tartes du dimanche</h3>
+        <p class="spec-desc">Fruits de saison, crème d'amande et pâte sablée maison. Une nouvelle tarte chaque semaine, selon l'arrivage du marché.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HORAIRES & CONTACT -->
+  <section>
+    <div class="contact-section">
+      <div class="contact-block fade-in">
+        <p class="section-label">Horaires</p>
+        <h2 class="section-title" style="color: var(--dark)">Quand nous <em style="color: var(--gold)">trouver</em></h2>
+
+        <table class="horaires-table">
+          <tr><td>Lundi – Vendredi</td><td>07h00 – 19h30</td></tr>
+          <tr><td>Samedi</td><td>07h00 – 20h00</td></tr>
+          <tr><td>Dimanche</td><td>07h30 – 13h00</td></tr>
+          <tr><td>Mardi</td><td class="closed">Fermé</td></tr>
+        </table>
+      </div>
+
+      <div class="contact-info fade-in" style="transition-delay: 0.15s">
+        <p class="section-label">Nous contacter</p>
+        <h2 class="section-title" style="color: var(--dark)">Venez nous <em style="color: var(--gold)">rendre visite</em></h2>
+
+        <div class="info-item">
+          <span class="info-icon">📍</span>
+          <div class="info-content">
+            <p class="info-label">Adresse</p>
+            <p class="info-value">14, rue du Vieux-Marché<br/>75011 Paris</p>
+            <a href="#" class="btn-map">→ Voir sur la carte</a>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">📞</span>
+          <div class="info-content">
+            <p class="info-label">Téléphone</p>
+            <p class="info-value">01 42 78 33 51</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">✉️</span>
+          <div class="info-content">
+            <p class="info-label">E-mail</p>
+            <p class="info-value">bonjour@aupaindore.fr</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Au <span>Pain Doré</span></div>
+    <p class="footer-copy">© 2024 · Boulangerie artisanale depuis 1987 · Paris</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
