@@ -516,6 +516,45 @@
       letter-spacing: 0.1em;
     }
 
+    /* ── RETOUR PORTFOLIO ─────────────────── */
+    .btn-back {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1.4rem;
+      background: rgba(30, 14, 5, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(184, 134, 11, 0.4);
+      color: rgba(250, 244, 232, 0.85);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background: rgba(30, 14, 5, 0.95);
+      border-color: var(--gold);
+      color: #E8C97A;
+    }
+
+    .btn-back svg {
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-back:hover svg {
+      transform: translateX(-3px);
+    }
+
     /* ── ANIMATIONS ───────────────────────── */
     .fade-in {
       opacity: 0;
@@ -563,6 +602,13 @@
   </style>
 </head>
 <body>
+
+  <a href="../../index.html" class="btn-back">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+    Portfolio
+  </a>
 
   <!-- HERO -->
   <section class="hero">
