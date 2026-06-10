@@ -18,6 +18,10 @@
   --font-mono:    'DM Mono', monospace;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --glass-bg:     rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-shadow: 0 18px 50px rgba(16, 15, 13, 0.08);
 }
 
 html { scroll-behavior: smooth; }
@@ -44,6 +48,32 @@ figure { margin: 0; }
   color: var(--muted2);
 }
 
+/* Halos d'accent très diffus : donnent de la matière
+   à flouter aux surfaces glass, le crème reste dominant */
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.bg-decor::before,
+.bg-decor::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+.bg-decor::before {
+  width: 42vw; height: 42vw;
+  top: -8vw; right: -10vw;
+  background: radial-gradient(circle, rgba(20, 0, 255, 0.13), transparent 70%);
+}
+.bg-decor::after {
+  width: 38vw; height: 38vw;
+  bottom: -10vw; left: -8vw;
+  background: radial-gradient(circle, rgba(255, 51, 0, 0.11), transparent 70%);
+}
+
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -52,8 +82,10 @@ figure { margin: 0; }
   justify-content: space-between;
   align-items: center;
   padding: 1.6rem 3rem;
-  background: var(--bg);
-  border-bottom: 1px solid var(--muted);
+  background: rgba(242, 238, 230, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(16, 15, 13, 0.08);
 }
 
 .nav-logo {
@@ -103,7 +135,17 @@ figure { margin: 0; }
   margin-bottom: 2rem;
   animation: fadeUp 0.8s var(--ease-out) 0.1s both;
 }
-.hero-tag .mono { color: var(--accent); }
+.hero-tag .mono {
+  color: var(--accent);
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  box-shadow: var(--glass-shadow);
+}
 
 .hero-name {
   display: flex;
@@ -296,37 +338,6 @@ figure { margin: 0; }
   flex-wrap: wrap;
 }
 
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.8rem;
-  border: 1px solid var(--fg);
-  color: var(--fg);
-  text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.35s ease;
-}
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  transform: translateX(-101%);
-  transition: transform 0.35s var(--ease-out);
-}
-.btn-primary:hover::before { transform: translateX(0); }
-.btn-primary:hover { color: #fff; }
-.btn-primary span,
-.btn-primary svg { position: relative; z-index: 1; }
-.btn-primary svg { width: 13px; height: 13px; transition: transform 0.3s; }
-.btn-primary:hover svg { transform: translateY(3px); }
-
 .social-links { display: flex; gap: 1.2rem; }
 .social-link {
   color: var(--muted2) !important;
@@ -344,9 +355,13 @@ figure { margin: 0; }
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  padding-top: 0.5rem;
-  border-left: 1px solid var(--muted);
-  padding-left: 3rem;
+  padding: 2.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  box-shadow: var(--glass-shadow);
 }
 
 .skill-label {
@@ -470,6 +485,12 @@ figure { margin: 0; }
   transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
   z-index: 1;
   pointer-events: none;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(16, 15, 13, 0.18);
 }
 .project-image-reveal img {
   width: 100%; height: 100%;
@@ -558,7 +579,22 @@ figure { margin: 0; }
   color: var(--bg);
   padding: 8rem 3rem;
   position: relative;
+  overflow: hidden;
 }
+
+/* halo bleu diffus derrière le panneau glass du contact */
+.contact::before {
+  content: '';
+  position: absolute;
+  width: 45vw; height: 45vw;
+  top: -12vw; right: -10vw;
+  background: radial-gradient(circle, rgba(20, 0, 255, 0.35), transparent 65%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.contact .section-eyebrow,
+.contact-title { position: relative; z-index: 1; }
 
 .contact .section-number { color: var(--accent) !important; }
 .contact .section-label  { color: rgba(242,238,230,0.4) !important; }
@@ -577,7 +613,20 @@ figure { margin: 0; }
   font-style: normal;
 }
 
-.contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  padding: 2.2rem 2.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+}
 
 .contact-email {
   font-family: var(--font-mono);
@@ -677,13 +726,10 @@ figure { margin: 0; }
 
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
   .about-skills {
-    border-left: none;
-    padding-left: 0;
-    border-top: 1px solid var(--muted);
-    padding-top: 2rem;
     flex-direction: row;
     gap: 3rem;
     flex-wrap: wrap;
+    padding: 2rem;
   }
 
   .project-image-reveal { display: none; }
